@@ -1,4 +1,5 @@
 /* global d3 */
+//https://bl.ocks.org/john-guerra/830e536314436e2c6396484bcc1e3b3d
 document.body.style.zoom = 0.80
 var svg = d3.select("#chart"),
     margin = { top: 20, right: 20, bottom: 110, left: 40 },
@@ -9,6 +10,16 @@ var svg = d3.select("#chart"),
 
 // var parseDate = d3.timeParse("%b %Y");
 var parseDate = d3.timeParse("%Y-%-m-%-d");
+
+var usecheckBox01 = true;
+var usecheckBox02 = false;
+var usecheckBox03 = false;
+var usecheckBox04 = false;
+
+d3.select("#checkBox01").property("checked", usecheckBox01);
+d3.select("#checkBox02").property("checked", usecheckBox02);
+d3.select("#checkBox03").property("checked", usecheckBox03);
+d3.select("#checkBox04").property("checked", usecheckBox04);
 
 var x = d3.scaleTime().range([0, width]),
     x2 = d3.scaleTime().range([0, width]),
@@ -29,10 +40,20 @@ var zoom = d3.zoom()
     .extent([[0, 0], [width, height]])
     .on("zoom", zoomed);
 
-var areaTend = d3.line()
+var areaTend_Anual = d3.line()
     .curve(d3.curveCatmullRomOpen)
     .x(function (d) { return x(d.Fecha); })
-    .y(function (d) { return y(d.tend); });
+    .y(function (d) { return y(d.tend_anual); });
+
+var areaTend_Cuatrimestral = d3.line()
+    .curve(d3.curveCatmullRomOpen)
+    .x(function (d) { return x(d.Fecha); })
+    .y(function (d) { return y(d.tend_cuatrimestral); });
+
+var areaTend_Mensual = d3.line()
+    .curve(d3.curveCatmullRomOpen)
+    .x(function (d) { return x(d.Fecha); })
+    .y(function (d) { return y(d.tend_mensual); });
 
 var area = d3.line()
     .curve(d3.curveCatmullRomOpen)
@@ -59,7 +80,7 @@ var context = svg.append("g")
     .attr("class", "context")
     .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-var urlData = "resources/data/hurtoCelularesFrecuencia.csv";
+var urlData = "resources/data/hurtoCelularesFrecuencia_final.csv";
 
 d3.csv(urlData, type, function (error, data) {
     if (error) throw error;
@@ -73,15 +94,30 @@ d3.csv(urlData, type, function (error, data) {
 
     focus.append("path")
         .datum(data)
-        .attr("class", "area")
+        .attr("class", "area")        
         .attr("d", area);
-
+    
     focus.append("path")
         .datum(data)
         .attr("class", "areaTend")
-        .attr("d", areaTend);
-
-
+        .attr("id", "areaTend_Anual")
+        .attr("d", areaTend_Anual)
+        .attr("stroke-opacity", 0.0);
+    
+    focus.append("path")
+        .datum(data)
+        .attr("class", "areaTend")
+        .attr("id", "areaTend_Cuatrimestral")
+        .attr("d", areaTend_Cuatrimestral)
+        .attr("stroke-opacity", 0.0);
+    
+    focus.append("path")
+        .datum(data)
+        .attr("class", "areaTend")
+        .attr("id", "areaTend_Mensual")
+        .attr("d", areaTend_Mensual)
+        .attr("stroke-opacity", 0.0);
+    
     focus.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
@@ -114,12 +150,15 @@ d3.csv(urlData, type, function (error, data) {
         .call(zoom);
 });
 
+
 function brushed() {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
     focus.select(".area").attr("d", area);
-    focus.select(".areaTend").attr("d", areaTend);
+    focus.select("#areaTend_Anual").attr("d", areaTend_Anual);
+    focus.select("#areaTend_Cuatrimestral").attr("d", areaTend_Cuatrimestral);
+    focus.select("#areaTend_Mensual").attr("d", areaTend_Mensual);
     focus.select(".axis--x").call(xAxis);
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
         .scale(width / (s[1] - s[0]))
@@ -131,7 +170,9 @@ function zoomed() {
     var t = d3.event.transform;
     x.domain(t.rescaleX(x2).domain());
     focus.select(".area").attr("d", area);
-    focus.select(".areaTend").attr("d", areaTend);
+    focus.select("#areaTend_Anual").attr("d", areaTend_Anual);
+    focus.select("#areaTend_Cuatrimestral").attr("d", areaTend_Cuatrimestral);
+    focus.select("#areaTend_Mensual").attr("d", areaTend_Mensual);
     focus.select(".axis--x").call(xAxis);
     context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
 }
@@ -140,4 +181,68 @@ function type(d) {
     d.Fecha = parseDate(d.Fecha);
     d.Cantidad = +d.Cantidad;
     return d;
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+function button_click(indice) {
+    console.log("button_",indice);
+    //g.remove();
+    //update("resources/data/data_" + indice +".json");
+}
+
+d3.select("#button_1").on("click", function() {button_click("01");});
+d3.select("#button_2").on("click", function() {button_click("02");});
+d3.select("#button_3").on("click", function() {button_click("03");});
+d3.select("#button_4").on("click", function() {button_click("04");});
+d3.select("#button_5").on("click", function() {button_click("05");});
+
+
+d3.select("#checkBox01").on("change", oncheckBox01);
+d3.select("#checkBox02").on("change", oncheckBox02);
+d3.select("#checkBox03").on("change", oncheckBox03);
+d3.select("#checkBox04").on("change", oncheckBox04);
+
+function oncheckBox01() {    
+    if (usecheckBox01) {usecheckBox01 = false;focus.selectAll(".area").attr("stroke-opacity", 0.0);        
+    } else {usecheckBox01 = true;focus.selectAll(".area").attr("stroke-opacity", 1.0);}
+        
+    console.log("checkBox01: ",usecheckBox01);    
+}
+
+function oncheckBox02() {    
+    if (usecheckBox02) {
+        usecheckBox02 = false;
+        focus.selectAll("#areaTend_Anual").attr("stroke-opacity", 0.0);        
+        
+    } else {
+        usecheckBox02 = true;        
+        focus.selectAll("#areaTend_Anual").attr("stroke-opacity", 1.0);        
+    }    
+    console.log("checkBox02: ",usecheckBox02);        
+}
+
+function oncheckBox03() {    
+    if (usecheckBox03) {
+        usecheckBox03 = false;
+        focus.selectAll("#areaTend_Cuatrimestral").attr("stroke-opacity", 0.0);        
+        
+    } else {
+        usecheckBox03 = true;        
+        focus.selectAll("#areaTend_Cuatrimestral").attr("stroke-opacity", 1.0);        
+    }    
+    console.log("checkBox03: ",usecheckBox03);        
+}
+
+function oncheckBox04() {    
+    if (usecheckBox04) {
+        usecheckBox04 = false;
+        focus.selectAll("#areaTend_Mensual").attr("stroke-opacity", 0.0);        
+        
+    } else {
+        usecheckBox04 = true;        
+        focus.selectAll("#areaTend_Mensual").attr("stroke-opacity", 1.0);        
+    }    
+    console.log("checkBox04: ",usecheckBox04);        
 }
