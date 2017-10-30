@@ -1,9 +1,8 @@
 /* global d3 */
-//https://bl.ocks.org/john-guerra/830e536314436e2c6396484bcc1e3b3d
 document.body.style.zoom = 0.80
 var svg = d3.select("#chart"),
-    margin = { top: 20, right: 20, bottom: 110, left: 40 },
-    margin2 = { top: 800, right: 20, bottom: 30, left: 40 },
+    margin = { top: 20, right: 30, bottom: 150, left: 60 },
+    margin2 = { top: 780, right: 30, bottom: 30, left: 60 },
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     height2 = +svg.attr("height") - margin2.top - margin2.bottom;
@@ -11,10 +10,10 @@ var svg = d3.select("#chart"),
 // var parseDate = d3.timeParse("%b %Y");
 var parseDate = d3.timeParse("%Y-%-m-%-d");
 
-var usecheckBox01 = true;
-var usecheckBox02 = false;
-var usecheckBox03 = false;
-var usecheckBox04 = false;
+var usecheckBox01 = true,
+    usecheckBox02 = false,
+    usecheckBox03 = false,
+    usecheckBox04 = false;
 
 d3.select("#checkBox01").property("checked", usecheckBox01);
 d3.select("#checkBox02").property("checked", usecheckBox02);
@@ -40,30 +39,24 @@ var zoom = d3.zoom()
     .extent([[0, 0], [width, height]])
     .on("zoom", zoomed);
 
-var areaTend_Anual = d3.line()
-    .curve(d3.curveCatmullRomOpen)
+var areaTend_Anual = d3.line().curve(d3.curveCatmullRomOpen)
     .x(function (d) { return x(d.Fecha); })
     .y(function (d) { return y(d.tend_anual); });
 
-var areaTend_Cuatrimestral = d3.line()
-    .curve(d3.curveCatmullRomOpen)
+var areaTend_Cuatrimestral = d3.line().curve(d3.curveCatmullRomOpen)
     .x(function (d) { return x(d.Fecha); })
     .y(function (d) { return y(d.tend_cuatrimestral); });
 
-var areaTend_Mensual = d3.line()
-    .curve(d3.curveCatmullRomOpen)
+var areaTend_Mensual = d3.line().curve(d3.curveCatmullRomOpen)
     .x(function (d) { return x(d.Fecha); })
     .y(function (d) { return y(d.tend_mensual); });
 
-var area = d3.line()
-    .curve(d3.curveCatmullRomOpen)
+var area = d3.line().curve(d3.curveCatmullRomOpen)
     .x(function (d) { return x(d.Fecha); })
     .y(function (d) { return y(d.Cantidad); });
 
-var area2 = d3.line()
-    .curve(d3.curveMonotoneX)
-    .x(function (d) { return x2(d.Fecha); })
-    // .y0(height2)
+var area2 = d3.line().curve(d3.curveMonotoneX)
+    .x(function (d) { return x2(d.Fecha); })    
     .y(function (d) { return y2(d.Cantidad); });
 
 svg.append("defs").append("clipPath")
@@ -85,8 +78,6 @@ var urlData = "resources/data/hurtoCelularesFrecuencia_final.csv";
 d3.csv(urlData, type, function (error, data) {
     if (error) throw error;
 
-    // x.domain(d3.extent(data, function (d) { return d.Fecha; }));
-    // y.domain([0, d3.max(data, function (d) { return d.Cantidad; })]);
     x.domain(d3.extent(data, function (d) { return d.Fecha; }));
     y.domain([0, d3.max(data, function (d) { return d.Cantidad; })]);
     x2.domain(x.domain());
@@ -126,6 +117,13 @@ d3.csv(urlData, type, function (error, data) {
     focus.append("g")
         .attr("class", "axis axis--y")
         .call(yAxis);
+    
+    focus.append("g")
+        .append("text")
+        .attr("class", "axis_label")
+        .attr("transform", "translate(-40,0) rotate(-90)")
+        .text("Cantidad de hurtos a celular")        
+        .attr("text-anchor","end");    
 
     context.append("path")
         .datum(data)
@@ -186,19 +184,6 @@ function type(d) {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-function button_click(indice) {
-    console.log("button_",indice);
-    //g.remove();
-    //update("resources/data/data_" + indice +".json");
-}
-
-d3.select("#button_1").on("click", function() {button_click("01");});
-d3.select("#button_2").on("click", function() {button_click("02");});
-d3.select("#button_3").on("click", function() {button_click("03");});
-d3.select("#button_4").on("click", function() {button_click("04");});
-d3.select("#button_5").on("click", function() {button_click("05");});
-
-
 d3.select("#checkBox01").on("change", oncheckBox01);
 d3.select("#checkBox02").on("change", oncheckBox02);
 d3.select("#checkBox03").on("change", oncheckBox03);
@@ -207,42 +192,28 @@ d3.select("#checkBox04").on("change", oncheckBox04);
 function oncheckBox01() {    
     if (usecheckBox01) {usecheckBox01 = false;focus.selectAll(".area").attr("stroke-opacity", 0.0);        
     } else {usecheckBox01 = true;focus.selectAll(".area").attr("stroke-opacity", 1.0);}
-        
-    console.log("checkBox01: ",usecheckBox01);    
-}
+ }
 
 function oncheckBox02() {    
-    if (usecheckBox02) {
-        usecheckBox02 = false;
-        focus.selectAll("#areaTend_Anual").attr("stroke-opacity", 0.0);        
-        
-    } else {
-        usecheckBox02 = true;        
-        focus.selectAll("#areaTend_Anual").attr("stroke-opacity", 1.0);        
-    }    
-    console.log("checkBox02: ",usecheckBox02);        
+    if (usecheckBox02) {usecheckBox02 = false;focus.selectAll("#areaTend_Anual").attr("stroke-opacity", 0.0);       
+    } else {usecheckBox02 = true;focus.selectAll("#areaTend_Anual").attr("stroke-opacity", 1.0);}
 }
 
-function oncheckBox03() {    
-    if (usecheckBox03) {
-        usecheckBox03 = false;
-        focus.selectAll("#areaTend_Cuatrimestral").attr("stroke-opacity", 0.0);        
-        
-    } else {
-        usecheckBox03 = true;        
-        focus.selectAll("#areaTend_Cuatrimestral").attr("stroke-opacity", 1.0);        
-    }    
-    console.log("checkBox03: ",usecheckBox03);        
+function oncheckBox03() {
+    if (usecheckBox03) {usecheckBox03 = false;focus.selectAll("#areaTend_Cuatrimestral").attr("stroke-opacity", 0.0);        
+    } else {usecheckBox03 = true;focus.selectAll("#areaTend_Cuatrimestral").attr("stroke-opacity", 1.0);}        
 }
 
 function oncheckBox04() {    
-    if (usecheckBox04) {
-        usecheckBox04 = false;
-        focus.selectAll("#areaTend_Mensual").attr("stroke-opacity", 0.0);        
-        
-    } else {
-        usecheckBox04 = true;        
-        focus.selectAll("#areaTend_Mensual").attr("stroke-opacity", 1.0);        
-    }    
-    console.log("checkBox04: ",usecheckBox04);        
+    if (usecheckBox04) {usecheckBox04 = false;focus.selectAll("#areaTend_Mensual").attr("stroke-opacity", 0.0);     
+    } else {usecheckBox04 = true;focus.selectAll("#areaTend_Mensual").attr("stroke-opacity", 1.0);}
 }
+
+/*
+http://mcaule.github.io/d3-timeseries/
+Pendientes:
+ - tooltip
+ - leyenda
+ - echar pola
+ - ajustar height de las gráficas
+ */
