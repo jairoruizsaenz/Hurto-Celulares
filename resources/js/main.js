@@ -58,7 +58,7 @@ var context = svg.append("g")
     .attr("class", "context")
     .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-var urlData = "/resources/data/hurtoCelularesFrecuencia.csv";
+var urlData = "resources/data/hurtoCelularesFrecuencia.csv";
 
 // d3.csv("sp500.csv", type, function (error, data) {
 d3.csv(urlData, type, function (error, data) {
