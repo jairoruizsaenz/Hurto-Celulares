@@ -179,3 +179,72 @@ p{background-color: aqua}
   background-image: -o-linear-gradient(top, #fd703c, #ea6838);
   background-image: linear-gradient(to bottom, #fd703c, #ea6838);
 }
+
+
+.area {
+    fill: transparent;
+    /* stroke: red; */
+    stroke: #1b9e77;
+    clip-path: url(#clip);
+}
+
+.areaTend {
+    fill: transparent;
+    /* stroke: blue; */
+    stroke: #d95f02;
+    clip-path: url(#clip);
+}
+
+.zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+}
+
+.cursiva{
+    padding: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(27,31,35,0.05);
+    border-radius: 3px;
+}
+
+.tableDataset{
+    margin-bottom: 20px;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 0px
+}
+
+.tableDataset tr{
+    background-color: #fff;
+    border-top: 1px solid #c6cbd1;
+}
+
+.tableDataset tr:nth-child(2n){
+    background-color: #f6f8fa;
+}
+
+.tableDataset tr td{
+    padding: 6px 13px;
+    border: 1px solid #dfe2e5;
+}
+
+.enlaces {
+    position: fixed;
+    top: 10px;
+    right: 43px;
+    z-index: 99;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-color: #D0D0D0;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.4);
+}
+
+.enlaces img {
+    vertical-align: middle;
+}
