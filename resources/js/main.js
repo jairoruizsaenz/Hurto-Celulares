@@ -121,9 +121,9 @@ d3.csv(urlData, type, function (error, data) {
     focus.append("g")
         .append("text")
         .attr("class", "axis_label")
-        .attr("transform", "translate(-40,0) rotate(-90)")
+        .attr("transform", "translate(-40," + height/2 + ") rotate(-90)")
         .text("Cantidad de hurtos a celular")        
-        .attr("text-anchor","end");    
+        .attr("text-anchor","middle");
 
     context.append("path")
         .datum(data)
