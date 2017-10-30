@@ -113,7 +113,7 @@ header {
     overflow: hidden; /* will contain if #first is longer than #second */
 }
 #first {
-    width: 900px;
+    width: 1000px;
     float:left; /* add this */
     /*border: 1px solid red;*/
 }
@@ -183,14 +183,12 @@ p{background-color: aqua}
 
 .area {
     fill: transparent;
-    /* stroke: red; */
-    stroke: #1b9e77;
+    stroke: #0f649d;
     clip-path: url(#clip);
 }
 
 .areaTend {
     fill: transparent;
-    /* stroke: blue; */
     stroke: #d95f02;
     clip-path: url(#clip);
 }
