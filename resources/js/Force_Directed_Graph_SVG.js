@@ -1,5 +1,5 @@
 /* global d3 */
-document.body.style.zoom = 0.80
+document.body.style.zoom = 0.5
 var highlight_stroke_width = 3,
     highlight_color = "#fd0000",
     highlight_trans = 0.1,
