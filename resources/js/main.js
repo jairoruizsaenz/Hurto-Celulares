@@ -211,6 +211,11 @@ function oncheckBox04() {
 
 /*
 http://mcaule.github.io/d3-timeseries/
+https://bl.ocks.org/alandunning/cfb7dcd7951826b9eacd54f0647f48d3
+
+https://bl.ocks.org/mbostock/805115ebaa574e771db1875a6d828949
+https://jsfiddle.net/ningunaparte/9gm68vmn/
+
 Pendientes:
  - tooltip
  - leyenda
