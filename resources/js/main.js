@@ -1,5 +1,5 @@
 /* global d3 */
-document.body.style.zoom = 0.80
+document.body.style.zoom = 0.60
 var svg = d3.select("#chart"),
     margin = { top: 20, right: 30, bottom: 150, left: 60 },
     margin2 = { top: 780, right: 30, bottom: 30, left: 60 },
